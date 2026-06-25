@@ -727,10 +727,12 @@
         <div class="cat-desc">${cat.description}</div>
         <span class="cat-count">${cat.count} words</span>
         <div class="cat-actions">
-          <button class="cat-btn cat-btn-practice" onclick="startSession('${cat.slug}', '${cat.title}')">Practice</button>
-          <button class="cat-btn cat-btn-review" onclick="startReview('${cat.slug}', '${cat.title}')">Review list</button>
+          <button class="cat-btn cat-btn-practice" data-slug="${cat.slug}" data-title="${cat.title}">Practice</button>
+          <button class="cat-btn cat-btn-review" data-slug="${cat.slug}" data-title="${cat.title}">Review list</button>
         </div>
       `;
+      card.querySelector('.cat-btn-practice').addEventListener('click', e => { e.stopPropagation(); startSession(cat.slug, cat.title); });
+      card.querySelector('.cat-btn-review').addEventListener('click', e => { e.stopPropagation(); startReview(cat.slug, cat.title); });
       grid.appendChild(card);
     });
   }
@@ -761,11 +763,14 @@
       list.innerHTML = data.words.map((w, i) => `
         <div class="review-word-item">
           <span>${w}</span>
-          <button class="review-speak-btn" onclick="speakText('${w.replace(/'/g, "\\'")}')">
+          <button class="review-speak-btn" data-word="${w.replace(/"/g, '&quot;')}">
             ${speakerSVG}
           </button>
         </div>
       `).join('');
+      list.querySelectorAll('.review-speak-btn').forEach(btn => {
+        btn.addEventListener('click', () => speakText(btn.dataset.word));
+      });
       showScreen('review');
     } catch (e) {
       alert('Could not load that word list.');
