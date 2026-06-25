@@ -63,6 +63,35 @@
       text-transform: uppercase;
     }
 
+    .voice-picker-wrap {
+      margin-left: auto;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .voice-picker-label {
+      font-size: 0.72rem;
+      color: var(--muted);
+      font-weight: 500;
+      white-space: nowrap;
+    }
+
+    #voice-select {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.8rem;
+      color: var(--text);
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 5px 8px;
+      cursor: pointer;
+      max-width: 200px;
+      outline: none;
+    }
+
+    #voice-select:focus { border-color: var(--accent); }
+
     main {
       width: 100%;
       max-width: 680px;
@@ -584,6 +613,10 @@
 <header>
   <h1>OET Spelling</h1>
   <span>Medical English Practice</span>
+  <div class="voice-picker-wrap">
+    <label class="voice-picker-label" for="voice-select">Voice</label>
+    <select id="voice-select"><option>Loading…</option></select>
+  </div>
 </header>
 
 <main>
@@ -699,6 +732,47 @@
 
   const MAX_ATTEMPTS = 4; // 1 original + 3 retries
 
+  // ── VOICES ──
+  let selectedVoice = null;
+
+  function populateVoices() {
+    const voices = window.speechSynthesis.getVoices();
+    if (!voices.length) return;
+
+    const select = document.getElementById('voice-select');
+    // Prefer English voices; sort so en-GB comes first, then en-US, then others
+    const englishVoices = voices.filter(v => v.lang.startsWith('en'));
+    const otherVoices   = voices.filter(v => !v.lang.startsWith('en'));
+    const sorted = [
+      ...englishVoices.filter(v => v.lang === 'en-GB'),
+      ...englishVoices.filter(v => v.lang === 'en-US'),
+      ...englishVoices.filter(v => v.lang !== 'en-GB' && v.lang !== 'en-US'),
+      ...otherVoices,
+    ];
+
+    select.innerHTML = sorted.map((v, i) =>
+      `<option value="${i}">${v.name} (${v.lang})</option>`
+    ).join('');
+
+    // Pick a sensible default: first en-GB, else first en-US, else first available
+    const defaultIdx = sorted.findIndex(v => v.lang === 'en-GB') >= 0
+      ? sorted.findIndex(v => v.lang === 'en-GB')
+      : sorted.findIndex(v => v.lang === 'en-US') >= 0
+        ? sorted.findIndex(v => v.lang === 'en-US')
+        : 0;
+
+    select.value = defaultIdx;
+    selectedVoice = sorted[defaultIdx];
+
+    select.addEventListener('change', () => {
+      selectedVoice = sorted[parseInt(select.value)];
+    });
+  }
+
+  // Voices load asynchronously on some browsers
+  window.speechSynthesis.onvoiceschanged = populateVoices;
+  populateVoices(); // also try immediately
+
   // ── NORMALISE (accent-insensitive matching) ──
   function normalise(str) {
     return str.trim().toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
@@ -780,7 +854,8 @@
   function speakText(text) {
     window.speechSynthesis.cancel();
     const utter = new SpeechSynthesisUtterance(text);
-    utter.lang = 'en-GB';
+    if (selectedVoice) utter.voice = selectedVoice;
+    utter.lang = selectedVoice ? selectedVoice.lang : 'en-GB';
     utter.rate = 0.88;
     window.speechSynthesis.speak(utter);
   }
@@ -833,7 +908,8 @@
     btn.classList.add('speaking');
 
     const utter = new SpeechSynthesisUtterance(currentWord.word);
-    utter.lang  = 'en-GB';
+    if (selectedVoice) utter.voice = selectedVoice;
+    utter.lang  = selectedVoice ? selectedVoice.lang : 'en-GB';
     utter.rate  = 0.88;
     utter.pitch = 1;
 
@@ -847,6 +923,15 @@
       }
     };
 
+    window.speechSynthesis.speak(utter);
+  }
+
+  function speakText(text) {
+    window.speechSynthesis.cancel();
+    const utter = new SpeechSynthesisUtterance(text);
+    if (selectedVoice) utter.voice = selectedVoice;
+    utter.lang = selectedVoice ? selectedVoice.lang : 'en-GB';
+    utter.rate = 0.88;
     window.speechSynthesis.speak(utter);
   }
 
