@@ -1,0 +1,31 @@
+{
+  "title": "Medications",
+  "description": "Drug names, types and related terms",
+  "words": [
+    "paracetamol",
+    "ibuprofen",
+    "beta blockers",
+    "antihistamine",
+    "corticosteroid",
+    "rivaroxaban",
+    "levothyroxine",
+    "simvastatin",
+    "methadone",
+    "codeine",
+    "propranolol",
+    "baclofen",
+    "melatonin",
+    "antifungal",
+    "antacid",
+    "laxatives",
+    "co-codamol",
+    "verapamil",
+    "morphine sulfate",
+    "atenolol",
+    "hydrocortisone",
+    "antihistamine",
+    "anti-inflammatory",
+    "triptan",
+    "opioids"
+  ]
+}
