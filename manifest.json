@@ -1,0 +1,80 @@
+[
+  {
+    "slug": "must-know",
+    "title": "Must Know",
+    "description": "Highest-frequency terms from real OET exams",
+    "count": 30
+  },
+  {
+    "slug": "neurological",
+    "title": "Neurological & Seizures",
+    "description": "Seizure types, brain conditions and neurological terms",
+    "count": 20
+  },
+  {
+    "slug": "musculoskeletal",
+    "title": "Musculoskeletal",
+    "description": "Bones, joints, muscles and related conditions",
+    "count": 23
+  },
+  {
+    "slug": "cardiovascular",
+    "title": "Cardiovascular",
+    "description": "Heart, blood and circulatory conditions",
+    "count": 20
+  },
+  {
+    "slug": "gastro",
+    "title": "Gastro & Digestive",
+    "description": "Digestive system conditions and procedures",
+    "count": 20
+  },
+  {
+    "slug": "skin",
+    "title": "Skin & Dermatology",
+    "description": "Skin conditions, treatments and symptoms",
+    "count": 20
+  },
+  {
+    "slug": "respiratory",
+    "title": "Respiratory",
+    "description": "Lungs, breathing and airway conditions",
+    "count": 14
+  },
+  {
+    "slug": "mental-health",
+    "title": "Mental Health & Neuropsych",
+    "description": "Mental health conditions and psychological terms",
+    "count": 19
+  },
+  {
+    "slug": "medications",
+    "title": "Medications",
+    "description": "Drug names, types and related terms",
+    "count": 25
+  },
+  {
+    "slug": "womens-health",
+    "title": "Women's Health & Reproductive",
+    "description": "Conditions and terms specific to women's health",
+    "count": 18
+  },
+  {
+    "slug": "symptoms",
+    "title": "Symptoms & Sensations",
+    "description": "Common patient-reported symptoms and feelings",
+    "count": 27
+  },
+  {
+    "slug": "infections",
+    "title": "Infections & Immune",
+    "description": "Infectious diseases and immune system conditions",
+    "count": 19
+  },
+  {
+    "slug": "endocrine",
+    "title": "Endocrine & Metabolic",
+    "description": "Hormones, metabolism and related conditions",
+    "count": 21
+  }
+]

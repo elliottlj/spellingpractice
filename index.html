@@ -1,0 +1,839 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>OET Spelling Practice</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@400;500;600&family=DM+Mono&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg:        #F0EEE9;
+      --surface:   #FFFFFF;
+      --border:    #DDD9D0;
+      --text:      #1A1917;
+      --muted:     #7A756C;
+      --accent:    #1A4F8A;
+      --accent-lt: #E8EEF6;
+      --green:     #1D6848;
+      --green-lt:  #E6F3EC;
+      --red:       #9B2418;
+      --red-lt:    #FAEAE8;
+      --must:      #7A3B00;
+      --must-lt:   #FEF3E6;
+      --radius:    10px;
+      --shadow:    0 1px 3px rgba(0,0,0,0.08), 0 4px 16px rgba(0,0,0,0.06);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    header {
+      width: 100%;
+      padding: 20px 32px;
+      display: flex;
+      align-items: baseline;
+      gap: 12px;
+      border-bottom: 1px solid var(--border);
+      background: var(--surface);
+    }
+
+    header h1 {
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.3rem;
+      color: var(--accent);
+      letter-spacing: -0.01em;
+    }
+
+    header span {
+      font-size: 0.8rem;
+      color: var(--muted);
+      font-weight: 500;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    main {
+      width: 100%;
+      max-width: 680px;
+      padding: 40px 24px 60px;
+      flex: 1;
+    }
+
+    /* ── SCREENS ── */
+    .screen { display: none; }
+    .screen.active { display: block; }
+
+    /* ── CATEGORY SCREEN ── */
+    .screen-label {
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 10px;
+    }
+
+    .screen-title {
+      font-family: 'DM Serif Display', serif;
+      font-size: 2rem;
+      line-height: 1.15;
+      color: var(--text);
+      margin-bottom: 6px;
+    }
+
+    .screen-sub {
+      color: var(--muted);
+      font-size: 0.92rem;
+      margin-bottom: 32px;
+    }
+
+    .category-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .cat-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 16px 18px;
+      cursor: pointer;
+      transition: border-color 0.15s, box-shadow 0.15s, transform 0.1s;
+      text-align: left;
+    }
+
+    .cat-card:hover {
+      border-color: var(--accent);
+      box-shadow: var(--shadow);
+      transform: translateY(-1px);
+    }
+
+    .cat-card.must-know {
+      background: var(--must-lt);
+      border-color: #E8C87A;
+      grid-column: 1 / -1;
+    }
+
+    .cat-card.must-know:hover {
+      border-color: var(--must);
+    }
+
+    .cat-title {
+      font-weight: 600;
+      font-size: 0.95rem;
+      margin-bottom: 3px;
+      color: var(--text);
+    }
+
+    .cat-card.must-know .cat-title {
+      color: var(--must);
+    }
+
+    .cat-desc {
+      font-size: 0.78rem;
+      color: var(--muted);
+      line-height: 1.4;
+    }
+
+    .cat-count {
+      display: inline-block;
+      margin-top: 8px;
+      font-size: 0.72rem;
+      font-weight: 600;
+      color: var(--muted);
+      font-family: 'DM Mono', monospace;
+      letter-spacing: 0.02em;
+    }
+
+    /* ── QUIZ SCREEN ── */
+    .quiz-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 28px;
+    }
+
+    .back-btn {
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: var(--muted);
+      font-size: 0.85rem;
+      font-family: 'DM Sans', sans-serif;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 0;
+      transition: color 0.15s;
+    }
+
+    .back-btn:hover { color: var(--text); }
+
+    .progress-wrap {
+      flex: 1;
+      margin: 0 20px;
+    }
+
+    .progress-bar {
+      height: 4px;
+      background: var(--border);
+      border-radius: 2px;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: var(--accent);
+      border-radius: 2px;
+      transition: width 0.3s ease;
+    }
+
+    .progress-label {
+      text-align: right;
+      font-size: 0.72rem;
+      color: var(--muted);
+      margin-top: 5px;
+      font-family: 'DM Mono', monospace;
+    }
+
+    .quiz-category-name {
+      font-size: 0.72rem;
+      font-weight: 600;
+      color: var(--muted);
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    .quiz-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 40px 36px;
+      box-shadow: var(--shadow);
+      text-align: center;
+    }
+
+    .quiz-instruction {
+      font-size: 0.8rem;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      font-weight: 600;
+      margin-bottom: 24px;
+    }
+
+    .hear-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: var(--accent);
+      color: #fff;
+      border: none;
+      border-radius: 50px;
+      padding: 14px 28px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.15s, transform 0.1s, box-shadow 0.15s;
+      box-shadow: 0 2px 8px rgba(26,79,138,0.25);
+    }
+
+    .hear-btn:hover {
+      background: #163e6e;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 14px rgba(26,79,138,0.3);
+    }
+
+    .hear-btn:active { transform: scale(0.97); }
+
+    .hear-btn svg { width: 20px; height: 20px; }
+
+    .hear-btn.speaking {
+      background: #163e6e;
+      animation: pulse-border 1s ease-in-out infinite;
+    }
+
+    @keyframes pulse-border {
+      0%, 100% { box-shadow: 0 2px 8px rgba(26,79,138,0.25); }
+      50%       { box-shadow: 0 2px 20px rgba(26,79,138,0.5); }
+    }
+
+    .replay-btn {
+      margin-top: 10px;
+      background: none;
+      border: none;
+      color: var(--accent);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.82rem;
+      font-weight: 500;
+      cursor: pointer;
+      text-decoration: underline;
+      text-underline-offset: 3px;
+      display: block;
+      width: 100%;
+      text-align: center;
+    }
+
+    .replay-btn:hover { color: #163e6e; }
+
+    .input-area {
+      margin-top: 32px;
+    }
+
+    .spelling-input {
+      width: 100%;
+      font-family: 'DM Mono', monospace;
+      font-size: 1.4rem;
+      text-align: center;
+      padding: 14px 16px;
+      border: 2px solid var(--border);
+      border-radius: var(--radius);
+      background: var(--bg);
+      color: var(--text);
+      letter-spacing: 0.05em;
+      outline: none;
+      transition: border-color 0.15s;
+    }
+
+    .spelling-input:focus { border-color: var(--accent); }
+
+    .spelling-input.correct { border-color: var(--green); background: var(--green-lt); }
+    .spelling-input.wrong   { border-color: var(--red);   background: var(--red-lt);   }
+
+    .check-btn {
+      margin-top: 14px;
+      width: 100%;
+      padding: 14px;
+      background: var(--accent);
+      color: #fff;
+      border: none;
+      border-radius: var(--radius);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+
+    .check-btn:hover:not(:disabled) { background: #163e6e; }
+    .check-btn:disabled { opacity: 0.45; cursor: default; }
+
+    .feedback {
+      margin-top: 20px;
+      padding: 14px 18px;
+      border-radius: var(--radius);
+      font-size: 0.9rem;
+      font-weight: 500;
+      display: none;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .feedback.show { display: flex; }
+    .feedback.correct { background: var(--green-lt); color: var(--green); }
+    .feedback.wrong   { background: var(--red-lt);   color: var(--red);   }
+
+    .feedback-icon { font-size: 1.2rem; flex-shrink: 0; }
+
+    .correct-spelling {
+      font-family: 'DM Mono', monospace;
+      font-weight: 600;
+      font-size: 1rem;
+    }
+
+    .retry-note {
+      font-size: 0.78rem;
+      opacity: 0.75;
+      margin-top: 2px;
+    }
+
+    .next-btn {
+      margin-top: 14px;
+      width: 100%;
+      padding: 13px;
+      background: var(--surface);
+      color: var(--accent);
+      border: 2px solid var(--accent);
+      border-radius: var(--radius);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: none;
+      transition: background 0.15s, color 0.15s;
+    }
+
+    .next-btn:hover { background: var(--accent-lt); }
+    .next-btn.show { display: block; }
+
+    /* ── RESULTS SCREEN ── */
+    .results-score {
+      text-align: center;
+      margin-bottom: 36px;
+    }
+
+    .score-ring {
+      width: 130px;
+      height: 130px;
+      margin: 0 auto 20px;
+    }
+
+    .score-ring circle {
+      fill: none;
+      stroke-width: 10;
+    }
+
+    .score-ring .bg    { stroke: var(--border); }
+    .score-ring .value { stroke: var(--accent); stroke-linecap: round; transition: stroke-dashoffset 0.8s ease; }
+
+    .score-number {
+      font-family: 'DM Serif Display', serif;
+      font-size: 2.6rem;
+      color: var(--text);
+      margin-bottom: 4px;
+    }
+
+    .score-label {
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    .results-section-title {
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 10px;
+    }
+
+    .failed-list {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+      margin-bottom: 28px;
+    }
+
+    .failed-item {
+      padding: 12px 18px;
+      border-bottom: 1px solid var(--border);
+      font-family: 'DM Mono', monospace;
+      font-size: 0.92rem;
+      color: var(--red);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .failed-item:last-child { border-bottom: none; }
+
+    .failed-item::before {
+      content: '✗';
+      font-style: normal;
+      opacity: 0.6;
+    }
+
+    .empty-failed {
+      text-align: center;
+      padding: 20px;
+      color: var(--green);
+      font-weight: 600;
+      font-size: 0.95rem;
+    }
+
+    .restart-btn {
+      width: 100%;
+      padding: 14px;
+      background: var(--accent);
+      color: #fff;
+      border: none;
+      border-radius: var(--radius);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      margin-bottom: 10px;
+      transition: background 0.15s;
+    }
+
+    .restart-btn:hover { background: #163e6e; }
+
+    .home-btn {
+      width: 100%;
+      padding: 13px;
+      background: var(--surface);
+      color: var(--accent);
+      border: 2px solid var(--accent);
+      border-radius: var(--radius);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+
+    .home-btn:hover { background: var(--accent-lt); }
+
+    @media (max-width: 480px) {
+      .category-grid { grid-template-columns: 1fr; }
+      .cat-card.must-know { grid-column: 1; }
+      .quiz-card { padding: 28px 20px; }
+      .screen-title { font-size: 1.6rem; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>OET Spelling</h1>
+  <span>Medical English Practice</span>
+</header>
+
+<main>
+
+  <!-- SCREEN 1: CATEGORY SELECTION -->
+  <div id="screen-categories" class="screen active">
+    <p class="screen-label">Practice session</p>
+    <h2 class="screen-title">Choose a word list</h2>
+    <p class="screen-sub">Words are read aloud. Type what you hear.</p>
+    <div class="category-grid" id="category-grid">
+      <p style="color:var(--muted); font-size:0.9rem;">Loading categories…</p>
+    </div>
+  </div>
+
+  <!-- SCREEN 2: QUIZ -->
+  <div id="screen-quiz" class="screen">
+    <div class="quiz-header">
+      <button class="back-btn" onclick="goHome()">
+        ← Categories
+      </button>
+      <div class="progress-wrap">
+        <div class="progress-bar">
+          <div class="progress-fill" id="progress-fill" style="width:0%"></div>
+        </div>
+        <div class="progress-label" id="progress-label">0 / 0</div>
+      </div>
+      <div class="quiz-category-name" id="quiz-category-name"></div>
+    </div>
+
+    <div class="quiz-card">
+      <p class="quiz-instruction">Listen, then spell the word</p>
+
+      <button class="hear-btn" id="hear-btn" onclick="speakWord()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+          <path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path>
+          <path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+        </svg>
+        Hear the word
+      </button>
+      <button class="replay-btn" id="replay-btn" onclick="speakWord()" style="display:none">Hear again</button>
+
+      <div class="input-area">
+        <input
+          type="text"
+          class="spelling-input"
+          id="spelling-input"
+          placeholder="type your spelling…"
+          autocomplete="off"
+          autocorrect="off"
+          autocapitalize="off"
+          spellcheck="false"
+        />
+        <button class="check-btn" id="check-btn" onclick="checkAnswer()">Check</button>
+        <div class="feedback" id="feedback">
+          <span class="feedback-icon" id="feedback-icon"></span>
+          <div>
+            <div id="feedback-text"></div>
+            <div class="retry-note" id="retry-note"></div>
+          </div>
+        </div>
+        <button class="next-btn" id="next-btn" onclick="nextWord()">Next word →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- SCREEN 3: RESULTS -->
+  <div id="screen-results" class="screen">
+    <p class="screen-label">Session complete</p>
+    <h2 class="screen-title" id="results-title">Well done</h2>
+
+    <div class="results-score">
+      <svg class="score-ring" viewBox="0 0 44 44">
+        <circle class="bg" cx="22" cy="22" r="17"/>
+        <circle class="value" id="score-arc" cx="22" cy="22" r="17"
+          stroke-dasharray="106.8" stroke-dashoffset="106.8"
+          transform="rotate(-90 22 22)"/>
+      </svg>
+      <div class="score-number" id="score-number">–</div>
+      <div class="score-label" id="score-label">words spelled correctly</div>
+    </div>
+
+    <p class="results-section-title" id="failed-label">Words to review</p>
+    <div class="failed-list" id="failed-list"></div>
+
+    <button class="restart-btn" id="restart-btn" onclick="restartSession()">Practice this list again</button>
+    <button class="home-btn" onclick="goHome()">Choose a different list</button>
+  </div>
+
+</main>
+
+<script>
+  // ── STATE ──
+  let allWords       = [];
+  let queue          = [];   // { word, attempts }
+  let currentWord    = null;
+  let totalWords     = 0;
+  let correctCount   = 0;
+  let failedWords    = [];
+  let hasHeard       = false;
+  let currentCategory = null;
+
+  const MAX_ATTEMPTS = 4; // 1 original + 3 retries
+
+  // ── INIT ──
+  async function loadCategories() {
+    try {
+      const res = await fetch('words/manifest.json');
+      const manifest = await res.json();
+      renderCategories(manifest);
+    } catch (e) {
+      document.getElementById('category-grid').innerHTML =
+        '<p style="color:var(--red)">Could not load word lists. Make sure the <code>words/</code> folder is present.</p>';
+    }
+  }
+
+  function renderCategories(manifest) {
+    const grid = document.getElementById('category-grid');
+    grid.innerHTML = '';
+    manifest.forEach(cat => {
+      const card = document.createElement('button');
+      card.className = 'cat-card' + (cat.slug === 'must-know' ? ' must-know' : '');
+      card.innerHTML = `
+        <div class="cat-title">${cat.slug === 'must-know' ? '★ ' : ''}${cat.title}</div>
+        <div class="cat-desc">${cat.description}</div>
+        <span class="cat-count">${cat.count} words</span>
+      `;
+      card.onclick = () => startSession(cat.slug, cat.title);
+      grid.appendChild(card);
+    });
+  }
+
+  async function startSession(slug, title) {
+    try {
+      const res = await fetch(`words/${slug}.json`);
+      const data = await res.json();
+      currentCategory = { slug, title };
+      allWords = [...data.words];
+      initQueue();
+      showScreen('quiz');
+    } catch (e) {
+      alert('Could not load that word list.');
+    }
+  }
+
+  function initQueue() {
+    queue = allWords.map(w => ({ word: w, attempts: 0 }));
+    shuffle(queue);
+    totalWords  = allWords.length;
+    correctCount = 0;
+    failedWords  = [];
+    document.getElementById('quiz-category-name').textContent = currentCategory.title;
+    loadNextWord();
+  }
+
+  // ── QUIZ LOGIC ──
+  function loadNextWord() {
+    if (queue.length === 0) {
+      showResults();
+      return;
+    }
+
+    currentWord = queue.shift();
+    hasHeard    = false;
+
+    const pct = ((totalWords - queue.length - 1) / totalWords) * 100;
+    document.getElementById('progress-fill').style.width = pct + '%';
+    const done = totalWords - queue.length;
+    document.getElementById('progress-label').textContent = `${done} / ${totalWords}`;
+
+    // Reset UI
+    const input = document.getElementById('spelling-input');
+    input.value = '';
+    input.className = 'spelling-input';
+    input.disabled = false;
+
+    document.getElementById('hear-btn').className = 'hear-btn';
+    document.getElementById('replay-btn').style.display = 'none';
+    document.getElementById('check-btn').disabled = true;
+    document.getElementById('feedback').className = 'feedback';
+    document.getElementById('next-btn').className = 'next-btn';
+
+    input.focus();
+  }
+
+  function speakWord() {
+    if (!currentWord) return;
+    window.speechSynthesis.cancel();
+
+    const btn = document.getElementById('hear-btn');
+    btn.classList.add('speaking');
+
+    const utter = new SpeechSynthesisUtterance(currentWord.word);
+    utter.lang  = 'en-GB';
+    utter.rate  = 0.88;
+    utter.pitch = 1;
+
+    utter.onend = () => {
+      btn.classList.remove('speaking');
+      if (!hasHeard) {
+        hasHeard = true;
+        document.getElementById('check-btn').disabled = false;
+        document.getElementById('replay-btn').style.display = 'block';
+        document.getElementById('spelling-input').focus();
+      }
+    };
+
+    window.speechSynthesis.speak(utter);
+  }
+
+  function checkAnswer() {
+    const input    = document.getElementById('spelling-input');
+    const typed    = input.value.trim().toLowerCase();
+    const correct  = currentWord.word.toLowerCase();
+    const feedback = document.getElementById('feedback');
+    const nextBtn  = document.getElementById('next-btn');
+
+    currentWord.attempts++;
+
+    if (typed === correct) {
+      correctCount++;
+      input.className = 'spelling-input correct';
+      feedback.className = 'feedback correct show';
+      document.getElementById('feedback-icon').textContent = '✓';
+      document.getElementById('feedback-text').textContent = 'Correct!';
+      document.getElementById('retry-note').textContent = '';
+      document.getElementById('check-btn').disabled = true;
+      input.disabled = true;
+      nextBtn.textContent = queue.length === 0 ? 'See results →' : 'Next word →';
+      nextBtn.className = 'next-btn show';
+    } else {
+      input.className = 'spelling-input wrong';
+      const retriesLeft = MAX_ATTEMPTS - currentWord.attempts;
+
+      if (retriesLeft > 0) {
+        // Put back into queue at a random position in the remaining words
+        const insertAt = Math.floor(Math.random() * (queue.length + 1));
+        queue.splice(insertAt, 0, currentWord);
+
+        feedback.className = 'feedback wrong show';
+        document.getElementById('feedback-icon').textContent = '✗';
+        document.getElementById('feedback-text').innerHTML = `The correct spelling is <span class="correct-spelling">${currentWord.word}</span>`;
+        document.getElementById('retry-note').textContent =
+          retriesLeft === 1 ? '1 more try remaining' : `${retriesLeft} more tries remaining`;
+      } else {
+        // Out of attempts
+        failedWords.push(currentWord.word);
+        feedback.className = 'feedback wrong show';
+        document.getElementById('feedback-icon').textContent = '✗';
+        document.getElementById('feedback-text').innerHTML = `Correct spelling: <span class="correct-spelling">${currentWord.word}</span>`;
+        document.getElementById('retry-note').textContent = 'No more tries for this word';
+        document.getElementById('check-btn').disabled = true;
+        input.disabled = true;
+      }
+
+      nextBtn.textContent = queue.length === 0 ? 'See results →' : 'Next word →';
+      nextBtn.className = 'next-btn show';
+    }
+  }
+
+  function nextWord() {
+    loadNextWord();
+  }
+
+  // ── RESULTS ──
+  function showResults() {
+    showScreen('results');
+
+    const pct = Math.round((correctCount / totalWords) * 100);
+
+    // Score ring animation
+    const arc = document.getElementById('score-arc');
+    const circ = 106.8;
+    setTimeout(() => {
+      arc.style.strokeDashoffset = circ - (circ * correctCount / totalWords);
+      if (pct === 100) arc.style.stroke = 'var(--green)';
+      else if (pct < 50) arc.style.stroke = 'var(--red)';
+    }, 100);
+
+    document.getElementById('score-number').textContent = `${correctCount} / ${totalWords}`;
+    document.getElementById('score-label').textContent  = `words spelled correctly (${pct}%)`;
+
+    const title = pct === 100 ? 'Perfect score!' : pct >= 80 ? 'Well done' : pct >= 60 ? 'Good effort' : 'Keep practising';
+    document.getElementById('results-title').textContent = title;
+
+    const failedList = document.getElementById('failed-list');
+    if (failedWords.length === 0) {
+      failedList.innerHTML = '<div class="empty-failed">✓ No words to review — excellent!</div>';
+      document.getElementById('failed-label').style.display = 'none';
+    } else {
+      document.getElementById('failed-label').style.display = 'block';
+      failedList.innerHTML = failedWords.map(w => `<div class="failed-item">${w}</div>`).join('');
+    }
+  }
+
+  function restartSession() {
+    initQueue();
+    showScreen('quiz');
+  }
+
+  function goHome() {
+    window.speechSynthesis.cancel();
+    showScreen('categories');
+  }
+
+  // ── HELPERS ──
+  function showScreen(name) {
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+    document.getElementById('screen-' + name).classList.add('active');
+  }
+
+  function shuffle(arr) {
+    for (let i = arr.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [arr[i], arr[j]] = [arr[j], arr[i]];
+    }
+  }
+
+  // ── KEYBOARD ──
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Enter') {
+      const nextBtn = document.getElementById('next-btn');
+      const checkBtn = document.getElementById('check-btn');
+      if (nextBtn.classList.contains('show')) {
+        nextWord();
+      } else if (!checkBtn.disabled) {
+        checkAnswer();
+      }
+    }
+  });
+
+  // ── BOOT ──
+  loadCategories();
+</script>
+</body>
+</html>
