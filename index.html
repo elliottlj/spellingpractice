@@ -157,6 +157,89 @@
       letter-spacing: 0.02em;
     }
 
+    .cat-actions {
+      display: flex;
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .cat-btn {
+      flex: 1;
+      padding: 7px 10px;
+      border-radius: 6px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.78rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.15s, border-color 0.15s;
+      text-align: center;
+    }
+
+    .cat-btn-practice {
+      background: var(--accent);
+      color: #fff;
+      border: 1px solid var(--accent);
+    }
+
+    .cat-btn-practice:hover { background: #163e6e; border-color: #163e6e; }
+
+    .cat-card.must-know .cat-btn-practice {
+      background: var(--must);
+      border-color: var(--must);
+    }
+
+    .cat-card.must-know .cat-btn-practice:hover { background: #5a2b00; }
+
+    .cat-btn-review {
+      background: transparent;
+      color: var(--muted);
+      border: 1px solid var(--border);
+    }
+
+    .cat-btn-review:hover { border-color: var(--muted); color: var(--text); }
+
+    /* ── REVIEW SCREEN ── */
+    .review-header {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+
+    .review-word-list {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+    }
+
+    .review-word-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 11px 18px;
+      border-bottom: 1px solid var(--border);
+      font-family: 'DM Mono', monospace;
+      font-size: 0.92rem;
+    }
+
+    .review-word-item:last-child { border-bottom: none; }
+
+    .review-speak-btn {
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: var(--accent);
+      padding: 4px;
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      transition: color 0.15s;
+    }
+
+    .review-speak-btn:hover { color: #163e6e; }
+    .review-speak-btn svg { width: 16px; height: 16px; }
+
     /* ── QUIZ SCREEN ── */
     .quiz-header {
       display: flex;
@@ -567,7 +650,18 @@
     </div>
   </div>
 
-  <!-- SCREEN 3: RESULTS -->
+  <!-- SCREEN 3: REVIEW -->
+  <div id="screen-review" class="screen">
+    <div class="review-header">
+      <button class="back-btn" onclick="goHome()">← Categories</button>
+      <div>
+        <div class="quiz-category-name" id="review-category-name"></div>
+      </div>
+    </div>
+    <div class="review-word-list" id="review-word-list"></div>
+  </div>
+
+  <!-- SCREEN 4: RESULTS -->
   <div id="screen-results" class="screen">
     <p class="screen-label">Session complete</p>
     <h2 class="screen-title" id="results-title">Well done</h2>
@@ -598,12 +692,17 @@
   let queue          = [];   // { word, attempts }
   let currentWord    = null;
   let totalWords     = 0;
-  let correctCount   = 0;
+  let correctWords   = new Set(); // unique words answered correctly
   let failedWords    = [];
   let hasHeard       = false;
   let currentCategory = null;
 
   const MAX_ATTEMPTS = 4; // 1 original + 3 retries
+
+  // ── NORMALISE (accent-insensitive matching) ──
+  function normalise(str) {
+    return str.trim().toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+  }
 
   // ── INIT ──
   async function loadCategories() {
@@ -621,22 +720,29 @@
     const grid = document.getElementById('category-grid');
     grid.innerHTML = '';
     manifest.forEach(cat => {
-      const card = document.createElement('button');
+      const card = document.createElement('div');
       card.className = 'cat-card' + (cat.slug === 'must-know' ? ' must-know' : '');
       card.innerHTML = `
         <div class="cat-title">${cat.slug === 'must-know' ? '★ ' : ''}${cat.title}</div>
         <div class="cat-desc">${cat.description}</div>
         <span class="cat-count">${cat.count} words</span>
+        <div class="cat-actions">
+          <button class="cat-btn cat-btn-practice" onclick="startSession('${cat.slug}', '${cat.title}')">Practice</button>
+          <button class="cat-btn cat-btn-review" onclick="startReview('${cat.slug}', '${cat.title}')">Review list</button>
+        </div>
       `;
-      card.onclick = () => startSession(cat.slug, cat.title);
       grid.appendChild(card);
     });
   }
 
+  async function loadWordData(slug) {
+    const res = await fetch(`words/${slug}.json`);
+    return await res.json();
+  }
+
   async function startSession(slug, title) {
     try {
-      const res = await fetch(`words/${slug}.json`);
-      const data = await res.json();
+      const data = await loadWordData(slug);
       currentCategory = { slug, title };
       allWords = [...data.words];
       initQueue();
@@ -646,11 +752,39 @@
     }
   }
 
+  async function startReview(slug, title) {
+    try {
+      const data = await loadWordData(slug);
+      document.getElementById('review-category-name').textContent = title;
+      const list = document.getElementById('review-word-list');
+      const speakerSVG = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path><path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg>`;
+      list.innerHTML = data.words.map((w, i) => `
+        <div class="review-word-item">
+          <span>${w}</span>
+          <button class="review-speak-btn" onclick="speakText('${w.replace(/'/g, "\\'")}')">
+            ${speakerSVG}
+          </button>
+        </div>
+      `).join('');
+      showScreen('review');
+    } catch (e) {
+      alert('Could not load that word list.');
+    }
+  }
+
+  function speakText(text) {
+    window.speechSynthesis.cancel();
+    const utter = new SpeechSynthesisUtterance(text);
+    utter.lang = 'en-GB';
+    utter.rate = 0.88;
+    window.speechSynthesis.speak(utter);
+  }
+
   function initQueue() {
     queue = allWords.map(w => ({ word: w, attempts: 0 }));
     shuffle(queue);
-    totalWords  = allWords.length;
-    correctCount = 0;
+    totalWords   = allWords.length;
+    correctWords = new Set(); // track unique words answered correctly
     failedWords  = [];
     document.getElementById('quiz-category-name').textContent = currentCategory.title;
     loadNextWord();
@@ -713,15 +847,15 @@
 
   function checkAnswer() {
     const input    = document.getElementById('spelling-input');
-    const typed    = input.value.trim().toLowerCase();
-    const correct  = currentWord.word.toLowerCase();
+    const typed    = normalise(input.value);
+    const correct  = normalise(currentWord.word);
     const feedback = document.getElementById('feedback');
     const nextBtn  = document.getElementById('next-btn');
 
     currentWord.attempts++;
 
     if (typed === correct) {
-      correctCount++;
+      correctWords.add(currentWord.word); // Set deduplicates automatically
       input.className = 'spelling-input correct';
       feedback.className = 'feedback correct show';
       document.getElementById('feedback-icon').textContent = '✓';
@@ -736,7 +870,6 @@
       const retriesLeft = MAX_ATTEMPTS - currentWord.attempts;
 
       if (retriesLeft > 0) {
-        // Put back into queue at a random position in the remaining words
         const insertAt = Math.floor(Math.random() * (queue.length + 1));
         queue.splice(insertAt, 0, currentWord);
 
@@ -746,7 +879,6 @@
         document.getElementById('retry-note').textContent =
           retriesLeft === 1 ? '1 more try remaining' : `${retriesLeft} more tries remaining`;
       } else {
-        // Out of attempts
         failedWords.push(currentWord.word);
         feedback.className = 'feedback wrong show';
         document.getElementById('feedback-icon').textContent = '✗';
@@ -769,6 +901,7 @@
   function showResults() {
     showScreen('results');
 
+    const correctCount = correctWords.size;
     const pct = Math.round((correctCount / totalWords) * 100);
 
     // Score ring animation
