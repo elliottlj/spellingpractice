@@ -9,37 +9,37 @@
     "slug": "neurological",
     "title": "Neurological & Seizures",
     "description": "Seizure types, brain conditions and neurological terms",
-    "count": 29
+    "count": 30
   },
   {
     "slug": "musculoskeletal",
     "title": "Musculoskeletal",
     "description": "Bones, joints, muscles and related conditions",
-    "count": 30
+    "count": 31
   },
   {
     "slug": "cardiovascular",
     "title": "Cardiovascular",
     "description": "Heart, blood and circulatory conditions",
-    "count": 23
+    "count": 24
   },
   {
     "slug": "gastro",
     "title": "Gastro & Digestive",
     "description": "Digestive system conditions and procedures",
-    "count": 26
+    "count": 27
   },
   {
     "slug": "skin",
     "title": "Skin & Dermatology",
     "description": "Skin conditions, treatments and symptoms",
-    "count": 24
+    "count": 26
   },
   {
     "slug": "respiratory",
     "title": "Respiratory",
     "description": "Lungs, breathing and airway conditions",
-    "count": 16
+    "count": 17
   },
   {
     "slug": "mental-health",
@@ -51,7 +51,7 @@
     "slug": "medications",
     "title": "Medications",
     "description": "Drug names, types and related terms",
-    "count": 36
+    "count": 38
   },
   {
     "slug": "womens-health",
@@ -63,7 +63,7 @@
     "slug": "symptoms",
     "title": "Symptoms & Sensations",
     "description": "Common patient-reported symptoms and feelings",
-    "count": 35
+    "count": 37
   },
   {
     "slug": "infections",
@@ -75,13 +75,19 @@
     "slug": "endocrine",
     "title": "Endocrine & Metabolic",
     "description": "Hormones, metabolism and related conditions",
-    "count": 23
+    "count": 24
+  },
+  {
+    "slug": "urological",
+    "title": "Urological",
+    "description": "Kidney, bladder and urinary conditions and procedures",
+    "count": 9
   },
   {
     "slug": "eye-ear",
     "title": "Eye & Ear Conditions",
     "description": "Conditions affecting vision and hearing",
-    "count": 9
+    "count": 13
   },
   {
     "slug": "cancers",
@@ -93,6 +99,6 @@
     "slug": "occupations",
     "title": "Occupations",
     "description": "Job titles and professions from OET listening passages",
-    "count": 53
+    "count": 58
   }
 ]
