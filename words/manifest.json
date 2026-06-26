@@ -9,72 +9,90 @@
     "slug": "neurological",
     "title": "Neurological & Seizures",
     "description": "Seizure types, brain conditions and neurological terms",
-    "count": 20
+    "count": 29
   },
   {
     "slug": "musculoskeletal",
     "title": "Musculoskeletal",
     "description": "Bones, joints, muscles and related conditions",
-    "count": 23
+    "count": 30
   },
   {
     "slug": "cardiovascular",
     "title": "Cardiovascular",
     "description": "Heart, blood and circulatory conditions",
-    "count": 20
+    "count": 23
   },
   {
     "slug": "gastro",
     "title": "Gastro & Digestive",
     "description": "Digestive system conditions and procedures",
-    "count": 20
+    "count": 26
   },
   {
     "slug": "skin",
     "title": "Skin & Dermatology",
     "description": "Skin conditions, treatments and symptoms",
-    "count": 20
+    "count": 24
   },
   {
     "slug": "respiratory",
     "title": "Respiratory",
     "description": "Lungs, breathing and airway conditions",
-    "count": 14
+    "count": 16
   },
   {
     "slug": "mental-health",
     "title": "Mental Health & Neuropsych",
     "description": "Mental health conditions and psychological terms",
-    "count": 19
+    "count": 23
   },
   {
     "slug": "medications",
     "title": "Medications",
     "description": "Drug names, types and related terms",
-    "count": 25
+    "count": 36
   },
   {
     "slug": "womens-health",
     "title": "Women's Health & Reproductive",
     "description": "Conditions and terms specific to women's health",
-    "count": 18
+    "count": 21
   },
   {
     "slug": "symptoms",
     "title": "Symptoms & Sensations",
     "description": "Common patient-reported symptoms and feelings",
-    "count": 27
+    "count": 35
   },
   {
     "slug": "infections",
     "title": "Infections & Immune",
     "description": "Infectious diseases and immune system conditions",
-    "count": 19
+    "count": 27
   },
   {
     "slug": "endocrine",
     "title": "Endocrine & Metabolic",
     "description": "Hormones, metabolism and related conditions",
-    "count": 21
+    "count": 23
+  },
+  {
+    "slug": "eye-ear",
+    "title": "Eye & Ear Conditions",
+    "description": "Conditions affecting vision and hearing",
+    "count": 9
+  },
+  {
+    "slug": "cancers",
+    "title": "Cancers",
+    "description": "Cancer types and oncology terms",
+    "count": 10
+  },
+  {
+    "slug": "occupations",
+    "title": "Occupations",
+    "description": "Job titles and professions from OET listening passages",
+    "count": 53
   }
 ]

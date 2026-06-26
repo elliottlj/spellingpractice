@@ -22,6 +22,8 @@
     "bilirubin",
     "cirrhosis",
     "active thyroid",
-    "hyperthyroidism"
+    "hyperthyroidism",
+    "testosterone",
+    "pituitary"
   ]
 }
