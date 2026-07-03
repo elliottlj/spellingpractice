@@ -610,7 +610,7 @@
 </head>
 <body>
 
-<div id="shared-header"></div>
+<div id="shared-header" style="width:100%;display:block;"></div>
 
 <header>
   <h1>OET Spelling</h1>
@@ -1058,7 +1058,7 @@
   });
 
   // ── SHARED HEADER ──
-  fetch('https://liamteacher.com/header.html')
+  fetch('https://site.com/header.html')
     .then(r => r.text())
     .then(html => { document.getElementById('shared-header').innerHTML = html; })
     .catch(() => {});
