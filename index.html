@@ -38,35 +38,21 @@
       align-items: center;
     }
 
-    header {
-      width: 100%;
-      padding: 20px 32px;
-      display: flex;
-      align-items: baseline;
-      gap: 12px;
-      border-bottom: 1px solid var(--border);
-      background: var(--surface);
-    }
-
-    header h1 {
+    .page-title {
       font-family: 'DM Serif Display', serif;
-      font-size: 1.3rem;
-      color: var(--accent);
-      letter-spacing: -0.01em;
-    }
-
-    header span {
-      font-size: 0.8rem;
-      color: var(--muted);
-      font-weight: 500;
-      letter-spacing: 0.04em;
-      text-transform: uppercase;
+      font-size: 2.6rem;
+      font-weight: 400;
+      color: #3D2459;
+      line-height: 1.1;
+      letter-spacing: -0.02em;
+      margin-bottom: 10px;
     }
 
     .voice-picker-wrap {
-      margin-left: auto;
+      margin-top: 28px;
       display: flex;
       align-items: center;
+      justify-content: flex-end;
       gap: 8px;
     }
 
@@ -605,6 +591,7 @@
       .cat-card.must-know { grid-column: 1; }
       .quiz-card { padding: 28px 20px; }
       .screen-title { font-size: 1.6rem; }
+      .page-title { font-size: 2rem; }
     }
   </style>
 </head>
@@ -612,24 +599,18 @@
 
 <div id="shared-header" style="width:100%;display:block;"></div>
 
-<header>
-  <h1>OET Spelling</h1>
-  <span>Medical English Practice</span>
-  <div class="voice-picker-wrap">
-    <label class="voice-picker-label" for="voice-select">Voice</label>
-    <select id="voice-select"><option>Loading…</option></select>
-  </div>
-</header>
-
 <main>
 
   <!-- SCREEN 1: CATEGORY SELECTION -->
   <div id="screen-categories" class="screen active">
-    <p class="screen-label">Practice session</p>
-    <h2 class="screen-title">Choose a word list</h2>
-    <p class="screen-sub">Words are read aloud. Type what you hear.</p>
+    <h1 class="page-title">OET Spelling</h1>
+    <p class="screen-sub">Words are read aloud. Type what you hear. Choose a word list to begin.</p>
     <div class="category-grid" id="category-grid">
       <p style="color:var(--muted); font-size:0.9rem;">Loading categories…</p>
+    </div>
+    <div class="voice-picker-wrap">
+      <label class="voice-picker-label" for="voice-select">Voice</label>
+      <select id="voice-select"><option>Loading…</option></select>
     </div>
   </div>
 
