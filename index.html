@@ -49,11 +49,12 @@
     }
 
     .voice-picker-wrap {
-      margin-top: 28px;
+      width: 100%;
       display: flex;
       align-items: center;
       justify-content: flex-end;
       gap: 8px;
+      padding: 12px 32px 0;
     }
 
     .voice-picker-label {
@@ -599,6 +600,11 @@
 
 <div id="shared-header" style="width:100%;display:block;"></div>
 
+<div class="voice-picker-wrap">
+  <label class="voice-picker-label" for="voice-select">Voice</label>
+  <select id="voice-select"><option>Loading…</option></select>
+</div>
+
 <main>
 
   <!-- SCREEN 1: CATEGORY SELECTION -->
@@ -607,10 +613,6 @@
     <p class="screen-sub">Words are read aloud. Type what you hear. Choose a word list to begin.</p>
     <div class="category-grid" id="category-grid">
       <p style="color:var(--muted); font-size:0.9rem;">Loading categories…</p>
-    </div>
-    <div class="voice-picker-wrap">
-      <label class="voice-picker-label" for="voice-select">Voice</label>
-      <select id="voice-select"><option>Loading…</option></select>
     </div>
   </div>
 
