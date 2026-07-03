@@ -1058,7 +1058,7 @@
   });
 
   // ── SHARED HEADER ──
-  fetch('https://liamteacher.com/header.html')
+  fetch('https://liamteacher.com/header.html', { cache: 'no-store' })
     .then(r => r.text())
     .then(html => { document.getElementById('shared-header').innerHTML = html; })
     .catch(() => {});
