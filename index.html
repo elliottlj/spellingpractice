@@ -721,6 +721,8 @@
 
 </main>
 
+<div id="shared-footer" style="width:100%;display:block;margin-top:auto;"></div>
+
 <script>
   // ── STATE ──
   let allWords       = [];
@@ -1057,10 +1059,14 @@
     }
   });
 
-  // ── SHARED HEADER ──
+  // ── SHARED HEADER & FOOTER ──
   fetch('https://liamteacher.com/header.html', { cache: 'no-store' })
     .then(r => r.text())
     .then(html => { document.getElementById('shared-header').innerHTML = html; })
+    .catch(() => {});
+  fetch('https://liamteacher.com/footer.html', { cache: 'no-store' })
+    .then(r => r.text())
+    .then(html => { document.getElementById('shared-footer').innerHTML = html; })
     .catch(() => {});
 
   // ── BOOT ──
