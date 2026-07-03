@@ -610,6 +610,8 @@
 </head>
 <body>
 
+<div id="shared-header"></div>
+
 <header>
   <h1>OET Spelling</h1>
   <span>Medical English Practice</span>
@@ -1054,6 +1056,12 @@
       }
     }
   });
+
+  // ── SHARED HEADER ──
+  fetch('https://site.com/header.html')
+    .then(r => r.text())
+    .then(html => { document.getElementById('shared-header').innerHTML = html; })
+    .catch(() => {});
 
   // ── BOOT ──
   loadCategories();
