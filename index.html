@@ -16,14 +16,15 @@
       --border:    #DDD9D0;
       --text:      #1A1917;
       --muted:     #7A756C;
-      --accent:    #1A4F8A;
-      --accent-lt: #E8EEF6;
+      --accent:    #1D7A7E;
+      --accent-lt: #E4F2F2;
       --green:     #1D6848;
       --green-lt:  #E6F3EC;
       --red:       #9B2418;
       --red-lt:    #FAEAE8;
-      --must:      #7A3B00;
-      --must-lt:   #FEF3E6;
+      --must:      #C99A3C;
+      --must-dark: #6B5210;
+      --must-lt:   #FBF4E2;
       --radius:    10px;
       --shadow:    0 1px 3px rgba(0,0,0,0.08), 0 4px 16px rgba(0,0,0,0.06);
     }
@@ -40,36 +41,23 @@
       align-items: center;
     }
 
-    header {
-      width: 100%;
-      padding: 20px 32px;
-      display: flex;
-      align-items: baseline;
-      gap: 12px;
-      border-bottom: 1px solid var(--border);
-      background: var(--surface);
-    }
-
-    header h1 {
+    .page-title {
       font-family: 'DM Serif Display', serif;
-      font-size: 1.3rem;
-      color: var(--accent);
-      letter-spacing: -0.01em;
-    }
-
-    header span {
-      font-size: 0.8rem;
-      color: var(--muted);
-      font-weight: 500;
-      letter-spacing: 0.04em;
-      text-transform: uppercase;
+      font-size: 2.6rem;
+      font-weight: 400;
+      color: #3D2459;
+      line-height: 1.1;
+      letter-spacing: -0.02em;
+      margin-bottom: 10px;
     }
 
     .voice-picker-wrap {
-      margin-left: auto;
+      width: 100%;
       display: flex;
       align-items: center;
+      justify-content: flex-end;
       gap: 8px;
+      padding: 12px 32px 0;
     }
 
     .voice-picker-label {
@@ -153,7 +141,7 @@
 
     .cat-card.must-know {
       background: var(--must-lt);
-      border-color: #E8C87A;
+      border-color: var(--must);
       grid-column: 1 / -1;
     }
 
@@ -169,7 +157,7 @@
     }
 
     .cat-card.must-know .cat-title {
-      color: var(--must);
+      color: var(--must-dark);
     }
 
     .cat-desc {
@@ -212,14 +200,15 @@
       border: 1px solid var(--accent);
     }
 
-    .cat-btn-practice:hover { background: #163e6e; border-color: #163e6e; }
+    .cat-btn-practice:hover { background: #155D60; border-color: #155D60; }
 
     .cat-card.must-know .cat-btn-practice {
       background: var(--must);
       border-color: var(--must);
+      color: #3A2D06;
     }
 
-    .cat-card.must-know .cat-btn-practice:hover { background: #5a2b00; }
+    .cat-card.must-know .cat-btn-practice:hover { background: #B8892F; }
 
     .cat-btn-review {
       background: transparent;
@@ -268,7 +257,7 @@
       transition: color 0.15s;
     }
 
-    .review-speak-btn:hover { color: #163e6e; }
+    .review-speak-btn:hover { color: #155D60; }
     .review-speak-btn svg { width: 16px; height: 16px; }
 
     /* ── QUIZ SCREEN ── */
@@ -362,13 +351,13 @@
       font-weight: 600;
       cursor: pointer;
       transition: background 0.15s, transform 0.1s, box-shadow 0.15s;
-      box-shadow: 0 2px 8px rgba(26,79,138,0.25);
+      box-shadow: 0 2px 8px rgba(29,122,126,0.25);
     }
 
     .hear-btn:hover {
-      background: #163e6e;
+      background: #155D60;
       transform: translateY(-1px);
-      box-shadow: 0 4px 14px rgba(26,79,138,0.3);
+      box-shadow: 0 4px 14px rgba(29,122,126,0.3);
     }
 
     .hear-btn:active { transform: scale(0.97); }
@@ -376,13 +365,13 @@
     .hear-btn svg { width: 20px; height: 20px; }
 
     .hear-btn.speaking {
-      background: #163e6e;
+      background: #155D60;
       animation: pulse-border 1s ease-in-out infinite;
     }
 
     @keyframes pulse-border {
-      0%, 100% { box-shadow: 0 2px 8px rgba(26,79,138,0.25); }
-      50%       { box-shadow: 0 2px 20px rgba(26,79,138,0.5); }
+      0%, 100% { box-shadow: 0 2px 8px rgba(29,122,126,0.25); }
+      50%       { box-shadow: 0 2px 20px rgba(29,122,126,0.5); }
     }
 
     .replay-btn {
@@ -401,7 +390,7 @@
       text-align: center;
     }
 
-    .replay-btn:hover { color: #163e6e; }
+    .replay-btn:hover { color: #155D60; }
 
     .input-area {
       margin-top: 32px;
@@ -442,7 +431,7 @@
       transition: background 0.15s;
     }
 
-    .check-btn:hover:not(:disabled) { background: #163e6e; }
+    .check-btn:hover:not(:disabled) { background: #155D60; }
     .check-btn:disabled { opacity: 0.45; cursor: default; }
 
     .feedback {
@@ -584,7 +573,7 @@
       transition: background 0.15s;
     }
 
-    .restart-btn:hover { background: #163e6e; }
+    .restart-btn:hover { background: #155D60; }
 
     .home-btn {
       width: 100%;
@@ -607,27 +596,25 @@
       .cat-card.must-know { grid-column: 1; }
       .quiz-card { padding: 28px 20px; }
       .screen-title { font-size: 1.6rem; }
+      .page-title { font-size: 2rem; }
     }
   </style>
 </head>
 <body>
 
-<header>
-  <h1>OET Spelling</h1>
-  <span>Medical English Practice</span>
-  <div class="voice-picker-wrap">
-    <label class="voice-picker-label" for="voice-select">Voice</label>
-    <select id="voice-select"><option>Loading…</option></select>
-  </div>
-</header>
+<div id="shared-header" style="width:100%;display:block;"></div>
+
+<div class="voice-picker-wrap">
+  <label class="voice-picker-label" for="voice-select">Voice</label>
+  <select id="voice-select"><option>Loading…</option></select>
+</div>
 
 <main>
 
   <!-- SCREEN 1: CATEGORY SELECTION -->
   <div id="screen-categories" class="screen active">
-    <p class="screen-label">Practice session</p>
-    <h2 class="screen-title">Choose a word list</h2>
-    <p class="screen-sub">Words are read aloud. Type what you hear.</p>
+    <h1 class="page-title">OET Spelling</h1>
+    <p class="screen-sub">Words are read aloud. Type what you hear. Choose a word list to begin.</p>
     <div class="category-grid" id="category-grid">
       <p style="color:var(--muted); font-size:0.9rem;">Loading categories…</p>
     </div>
@@ -720,6 +707,8 @@
   </div>
 
 </main>
+
+<div id="shared-footer" style="width:100%;display:block;margin-top:auto;"></div>
 
 <script>
   // ── STATE ──
@@ -1056,6 +1045,16 @@
       }
     }
   });
+
+  // ── SHARED HEADER & FOOTER ──
+  fetch('https://liamteacher.com/header.html', { cache: 'no-store' })
+    .then(r => r.text())
+    .then(html => { document.getElementById('shared-header').innerHTML = html; })
+    .catch(() => {});
+  fetch('https://liamteacher.com/footer.html', { cache: 'no-store' })
+    .then(r => r.text())
+    .then(html => { document.getElementById('shared-footer').innerHTML = html; })
+    .catch(() => {});
 
   // ── BOOT ──
   loadCategories();
